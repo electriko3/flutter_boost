@@ -43,6 +43,19 @@ public class FlutterBoostFragment extends FlutterFragment implements FlutterView
     private boolean isAttached = false;
     private boolean isFinishing = false;
 
+    ///TODO: Need delete after library migrate to flutter 2.8.+
+    class FakeExclusiveAppComponent implements io.flutter.embedding.android.ExclusiveAppComponent<Activity> {
+        public void detachFromFlutterEngine() {
+                        // do nothing.
+                            }
+
+                public Activity getAppComponent() {
+                        return getActivity();
+                    }
+    }
+    private FakeExclusiveAppComponent fakeAppComponent = new FakeExclusiveAppComponent();
+
+
     // @Override
     public void detachFromFlutterEngine() {
         /**
@@ -303,7 +316,9 @@ public class FlutterBoostFragment extends FlutterFragment implements FlutterView
     private void performAttach() {
         if (!isAttached) {
             // Attach plugins to the activity.
-            getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            //getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            ///TODO: Need delete after library migrate to flutter 2.8.+
+            getFlutterEngine().getActivityControlSurface().attachToActivity(fakeAppComponent, getLifecycle());
 
             if (platformPlugin == null) {
                 platformPlugin = new PlatformPlugin(getActivity(), getFlutterEngine().getPlatformChannel());

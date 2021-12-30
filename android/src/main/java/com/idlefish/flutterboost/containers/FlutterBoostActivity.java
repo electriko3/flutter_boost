@@ -152,7 +152,9 @@ public class FlutterBoostActivity extends FlutterActivity implements FlutterView
     private void performAttach() {
         if (!isAttached) {
             // Attach plugins to the activity.
-            getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            /// getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            ///TODO: Need delete after library migrate to flutter 2.8.+
+            getFlutterEngine().getActivityControlSurface().attachToActivity(delegate, getLifecycle());
 
             if (platformPlugin == null) {
                 platformPlugin = new PlatformPlugin(getActivity(), getFlutterEngine().getPlatformChannel());
