@@ -300,11 +300,23 @@ public class FlutterBoostFragment extends FlutterFragment implements FlutterView
         // performDetach();
         if (DEBUG) Log.d(TAG, "#didFragmentHide: " + this + ", isOpaque=" + isOpaque());
     }
+    //Fix for issue 1451
+    class FakeExclusiveAppComponent implements io.flutter.embedding.android.ExclusiveAppComponent<Activity> {
+        public void detachFromFlutterEngine() {
+                        // do nothing.
+                            }
+
+                public Activity getAppComponent() {
+                        return getActivity();
+                    }
+    }
+    private FakeExclusiveAppComponent fakeAppComponent = new FakeExclusiveAppComponent();
 
     private void performAttach() {
         if (!isAttached) {
-            // Attach plugins to the activity.
-            getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            // Attach plugins to the activity. Fix for issue 1451
+            //getFlutterEngine().getActivityControlSurface().attachToActivity(getActivity(), getLifecycle());
+            getFlutterEngine().getActivityControlSurface().attachToActivity(fakeAppComponent, getLifecycle());
 
             if (platformPlugin == null) {
                 platformPlugin = new PlatformPlugin(getActivity(), getFlutterEngine().getPlatformChannel());
